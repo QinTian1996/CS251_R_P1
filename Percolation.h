@@ -22,4 +22,6 @@ public:
 
     bool percolates();
 
+    bool percolatestats (int x, int y);
+
 };

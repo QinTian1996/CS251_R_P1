@@ -26,7 +26,7 @@ int main(int argc, char const *argv[]) {
             int i;
             const clock_t begin_time = clock();
             for (i = 0; i < n * n; i++) {
-                if(a.percolates()) { break; }
+                if(a.percolatestats(shuffle[i] / n, shuffle[i] % n)) { break; }
                 a.grid[shuffle[i]] = 1;
             }
             const clock_t end_time = clock();
@@ -37,7 +37,7 @@ int main(int argc, char const *argv[]) {
             int i;
             const clock_t begin_time = clock();
             for (i = 0; i < n * n; i++) {
-                if(a.percolates()) { break; }
+                if(a.percolatestats(shuffle[i] / n, shuffle[i] % n)) { break; }
                 a.grid[shuffle[i]] = 1;
             }
             const clock_t end_time = clock();

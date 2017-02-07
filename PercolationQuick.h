@@ -21,5 +21,7 @@ public:
     int tr(int x, int y);
 
     bool percolates();
-    
+
+    bool percolatestats (int x, int y);
+
 };

@@ -38,7 +38,28 @@ bool Percolation::isFull(int x, int y) {
 int Percolation::tr(int x, int y) {
    return (n - 1 - x) * n + y;
 }
-
+bool Percolation::percolatestats (int x, int y){
+    if(x > 0 && grid[tr(x-1, y)] != 0 && !a.connected(tr(x,y), tr(x-1,y))) {
+        a.Union(tr(x,y), tr(x-1,y));
+    }
+    if(x < n-1 && grid[tr(x+1, y)] != 0 && !a.connected(tr(x,y), tr(x+1,y))) {
+        a.Union(tr(x,y), tr(x+1,y));
+    }
+    if(y > 0 && grid[tr(x, y-1)] != 0 && !a.connected(tr(x,y), tr(x,y-1))) {
+        a.Union(tr(x,y), tr(x,y+1));
+    }
+    if(y < n-1 && grid[tr(x, y+1)] != 0 && !a.connected(tr(x,y), tr(x,y+1))) {
+        a.Union(tr(x,y), tr(x,y+1));
+    }
+    x = 0;
+    for(y = 0; y < n; y ++) {
+        //cout << "Find: " << tr(x,y) << ": "<< a.find(tr(x, y)) << endl;
+        if(a.find(tr(x, y)) < n) {
+            return true;
+        }
+    }
+    return false;
+}
 bool Percolation::percolates() {
 
    int x = 0, y = 0;
