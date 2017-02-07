@@ -1,16 +1,16 @@
-#include "WeightedQuickUnionUF.h"
+#include "QuickUnionUF.h"
 
 using namespace std;
 
-class Percolation {
+class PercolationQuick {
 
 public:
 
     vector<int> grid;
-    WeightedQuickUnionUF a;
+    QuickUnionUF a;
     int n;
 
-     Percolation(int n);
+    PercolationQuick(int n);
 
     void open(int x, int y);
 
@@ -21,5 +21,5 @@ public:
     int tr(int x, int y);
 
     bool percolates();
-
+    
 };

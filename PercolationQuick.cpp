@@ -1,11 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include <string>
-#include "Percolation.h"
+#include "PercolationQuick.h"
 
-
-Percolation::Percolation(int n) : a(n * n){
+PercolationQuick::PercolationQuick(int n) : a(n * n){
    this->n = n;
    int i = 0;
    int total = n * n;
@@ -14,32 +12,32 @@ Percolation::Percolation(int n) : a(n * n){
    }
 }
 
-void Percolation::open(int x, int y) {
+void PercolationQuick::open(int x, int y) {
    if(y < 0 || x < 0 || x >= n || y >= n) {
        return;
    }
    grid[tr(x,y)] = 1;
 }
 
-bool Percolation::isOpen(int x, int y) {
+bool PercolationQuick::isOpen(int x, int y) {
    if(y < 0 || x < 0 || x >= n || y >= n) {
        return 0;
    }
    return grid[tr(x,y)];
 }
 
-bool Percolation::isFull(int x, int y) {
+bool PercolationQuick::isFull(int x, int y) {
    if(y < 0 || x < 0 || x >= n || y >= n) {
        return 0;
    }
    return grid[tr(x,y)] == 2;
 }
 
-int Percolation::tr(int x, int y) {
+int PercolationQuick::tr(int x, int y) {
    return (n - 1 - x) * n + y;
 }
 
-bool Percolation::percolates() {
+bool PercolationQuick::percolates() {
 
    int x = 0, y = 0;
 
@@ -75,21 +73,3 @@ bool Percolation::percolates() {
    }
    return false;
 }
-
-/*int main(int argc, char const *argv[]) {
-    int n = 0;
-    cin >> n;
-    Percolation a(n);
-    while(cin.peek() != EOF) {
-        int x, y;
-        cin >> x;
-        cin >> y;
-        a.open(x, y);
-    }
-
-    bool p = a.percolates();
-    if(p)cout << "Yes" << endl;
-    else cout << "No" << endl;
-
-    return 0;
-}*/

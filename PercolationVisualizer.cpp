@@ -1,4 +1,5 @@
 #include "Percolation.h"
+#include "PercolationVisualizer.h"
 #include <vector>
 #include <iostream>
 #include <fstream>
