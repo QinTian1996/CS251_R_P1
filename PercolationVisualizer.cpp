@@ -9,7 +9,7 @@ int main(int argc, char const *argv[]) {
     string file_name;
     cin >> file_name;
     ifstream file_stream;
-    file_stream.open(file_name);
+    file_stream.open(file_name.c_str());
     int n = 0;
     file_stream >> n;
     ofstream of;

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include "WeightedQuickUnionUF.h"
 
 using namespace std;
 
@@ -8,10 +9,11 @@ class Percolation {
 
 public:
 
-    std::vector<int> grid;
+    vector<int> grid;
+    WeightedQuickUnionUF a;
     int n;
 
-     Percolation(int n) {
+     Percolation(int n) : a(n * n){
         this->n = n;
         int i = 0;
         int total = n * n;
@@ -44,44 +46,38 @@ public:
     int tr(int x, int y) {
         return (n - 1 - x) * n + y;
     }
-    bool rec(int x, int y) {
 
-        grid[tr(x,y)] = 2;
-
-        if(x == 0) return true;
-
-        if(x < n-1 && grid[tr(x+1,y)] == 1) {
-            bool up = rec(x+1, y);
-            if(up) return up;
-        }
-
-        if(x > 0 && grid[tr(x-1,y)] == 1) {
-            bool down = rec(x-1,y);
-            if(down) return down;
-        }
-
-        if(y > 0 && grid[tr(x, y-1)] == 1) {
-            bool left = rec(x, y-1);
-            if(left) return left;
-        }
-
-        if(y < n-1 && grid[tr(x, y+1)] == 1) {
-            bool right = rec(x, y+1);
-            if(right) return right;
-        }
-
-        return false;
-
-    }
     bool percolates() {
-        int i;
-        for(i = 0; i < grid.size();i++) {
-            if(grid[i] == 2) {
-                grid[i] = 1;
+
+        int x = 0, y = 0;
+
+        for(x = n-1; x >= 0; x--) {
+            for(y = 0; y <= n-1; y++) {
+
+                if(grid[tr(x, y)] != 1) { continue; }
+
+                if(x > 0 && grid[tr(x-1, y)] != 0 && !a.connected(tr(x,y), tr(x-1,y))) {
+                    a.Union(tr(x,y), tr(x-1,y));
+                }
+                if(x < n-1 && grid[tr(x+1, y)] != 0 && !a.connected(tr(x,y), tr(x+1,y))) {
+                    a.Union(tr(x,y), tr(x+1,y));
+                }
+                if(y > 0 && grid[tr(x, y-1)] != 0 && !a.connected(tr(x,y), tr(x,y-1))) {
+                    a.Union(tr(x,y), tr(x,y+1));
+                }
+                if(y < n-1 && grid[tr(x, y+1)] != 0 && !a.connected(tr(x,y), tr(x,y+1))) {
+                    a.Union(tr(x,y), tr(x,y+1));
+                }
+
+                if(a.find(tr(x, y)) >= n * (n - 1)) grid[tr(x, y)] = 2;
+
             }
         }
-        for(i = 0; i < n; i++) {
-            if(grid[i] == 1 && rec(n-1, i)) return true;
+
+        for(y = 0; y < n; y ++) {
+            if(a.find(tr(x, y)) >= n * (n - 1)) {
+                return true;
+            }
         }
         return false;
     }

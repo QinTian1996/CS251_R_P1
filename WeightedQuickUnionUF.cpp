@@ -22,7 +22,7 @@ int WeightedQuickUnionUF::find(int a)
 bool WeightedQuickUnionUF::connected(int p, int q) {
         //printf("\n%d %d\n", p, q);
         //printf("%d %d", find(p), find(q));
-        return find(p) == find(q);        
+        return find(p) == find(q);
 }
 
 void WeightedQuickUnionUF::Union(int a, int b)
