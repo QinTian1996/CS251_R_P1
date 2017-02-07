@@ -12,10 +12,12 @@ WeightedQuickUnionUF::WeightedQuickUnionUF(int n)
 
 int WeightedQuickUnionUF::find(int a)
 {
+	int b = a;
 	while (a != id[a])
 	{
 		a = id[a];
 	}
+	id[b] = a;
 	return a; // the root
 }
 
@@ -32,7 +34,7 @@ void WeightedQuickUnionUF::Union(int a, int b)
 	if (aRoot == bRoot) return;
 
     // make smaller root point to larger one
-    if (size[aRoot] < size[bRoot]) {
+    if (aRoot > bRoot) {
     	id[aRoot] = bRoot;
         size[bRoot] += size[aRoot];
     }

@@ -1,117 +1,96 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <string>
+#include "Percolation.h"
 
 using namespace std;
 
-class Percolation {
+Percolation::Percolation(int n) : a(n * n){
+   this->n = n;
+   int i = 0;
+   int total = n * n;
+   while(i++ < total) {
+       grid.push_back(0);
+   }
+}
 
-public:
+void Percolation::open(int x, int y) {
+   if(y < 0 || x < 0 || x >= n || y >= n) {
+       return;
+   }
+   grid[tr(x,y)] = 1;
+}
 
-    std::vector<int> grid;
-    int n;
+bool Percolation::isOpen(int x, int y) {
+   if(y < 0 || x < 0 || x >= n || y >= n) {
+       return 0;
+   }
+   return grid[tr(x,y)];
+}
 
-     Percolation(int n) {
-        this->n = n;
-        int i = 0;
-        int total = n * n;
-        while(i++ < total) {
-            grid.push_back(0);
-        }
-    }
+bool Percolation::isFull(int x, int y) {
+   if(y < 0 || x < 0 || x >= n || y >= n) {
+       return 0;
+   }
+   return grid[tr(x,y)] == 2;
+}
 
-    void open(int x, int y) {
-        if(x < 0 || y < 0 || y >= n || x >= n) {
-            return;
-        }
-        grid[x + y * n] = 1;
-    }
+int Percolation::tr(int x, int y) {
+   return (n - 1 - x) * n + y;
+}
 
-    bool isOpen(int x, int y) {
-        if(x < 0 || y < 0 || y >= n || x >= n) {
-            return 0;
-        }
-        return grid[x + y * n];
-    }
+bool Percolation::percolates() {
 
-    bool isFull(int x, int y) {
-        if(x < 0 || y < 0 || y >= n || x >= n) {
-            return 0;
-        }
-        return grid[x + y * n] == 2;
-    }
+   int x = 0, y = 0;
 
-    bool rec(int x, int y) {
+   for(x = n-1; x >= 0; x--) {
+       for(y = 0; y <= n-1; y++) {
 
-        grid[x + y * n] = 2;
+           if(grid[tr(x, y)] != 1) { continue; }
 
-        if(y == 0) return true;
+           if(x > 0 && grid[tr(x-1, y)] != 0 && !a.connected(tr(x,y), tr(x-1,y))) {
+               a.Union(tr(x,y), tr(x-1,y));
+           }
+           if(x < n-1 && grid[tr(x+1, y)] != 0 && !a.connected(tr(x,y), tr(x+1,y))) {
+               a.Union(tr(x,y), tr(x+1,y));
+           }
+           if(y > 0 && grid[tr(x, y-1)] != 0 && !a.connected(tr(x,y), tr(x,y-1))) {
+               a.Union(tr(x,y), tr(x,y+1));
+           }
+           if(y < n-1 && grid[tr(x, y+1)] != 0 && !a.connected(tr(x,y), tr(x,y+1))) {
+               a.Union(tr(x,y), tr(x,y+1));
+           }
 
-        if(y > 0 && grid[x + (y-1) * n] == 1) {
-            bool up = rec(x, y-1);
-            if(up) return up;
-        }
+           if(a.find(tr(x, y)) < n) grid[tr(x, y)] = 2;
 
-        if(y < n - 1 && grid[x + (y+1) * n] == 1) {
-            bool down = rec(x, y+1);
-            if(down) return down;
-        }
+       }
+   }
 
-        if(x > 0 && grid[x - 1 + y * n] == 1) {
-            bool left = rec(x-1, y);
-            if(left) return left;
-        }
-
-        if(x < n - 1 && grid[x + 1 + y * n] == 1) {
-            bool right = rec(x+1, y);
-            if(right) return right;
-        }
-
-        return false;
-
-    }
-    bool percolates() {
-        int i;
-        for(i = 0; i < grid.size();i++) {
-            if(grid[i] == 2) {
-                grid[i] = 1;
-            }
-        }
-        for(i = 0; i < n; i++) {
-            if(grid[i] == 1 && rec(i, n-1)) return true;
-        }
-        return false;
-    }
-
-};
-
+   x = 0;
+   for(y = 0; y < n; y ++) {
+       //cout << "Find: " << tr(x,y) << ": "<< a.find(tr(x, y)) << endl;
+       if(a.find(tr(x, y)) < n) {
+           return true;
+       }
+   }
+   return false;
+}
 
 /*int main(int argc, char const *argv[]) {
-    string file_name;
-    cin >> file_name;
-    ifstream file_stream;
-    file_stream.open(file_name);
     int n = 0;
-    file_stream >> n;
-    //cout << n;
+    cin >> n;
     Percolation a(n);
-    while(file_stream.peek() != EOF) {
+    while(cin.peek() != EOF) {
         int x, y;
-        file_stream >> y;
-        file_stream >> x;
+        cin >> x;
+        cin >> y;
         a.open(x, y);
     }
 
-    //simple print grid
-    for(int i = 0; i < a.grid.size();i++) {
-        cout << a.grid[i];
-        if((i + 1) % n == 0) { cout<<endl; }
-        else { cout << " "; }
-    }
-
-    if(a.percolates()) cout << "Yes" <<endl;
+    bool p = a.percolates();
+    if(p)cout << "Yes" << endl;
     else cout << "No" << endl;
 
     return 0;
-}
-*/
+}*/

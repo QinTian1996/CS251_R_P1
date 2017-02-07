@@ -11,10 +11,13 @@ QuickUnionUF::QuickUnionUF(int n)
 
 int QuickUnionUF::find(int a) //return root
 {
+	int b = a;
 	while (a!=id[a])
 	{
 		a = id[a];
 	}
+	id[b] = a;
+	
 	return a;
 
 }
